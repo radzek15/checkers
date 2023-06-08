@@ -205,3 +205,6 @@ fabric.properties
 tests
 *_test.py
 test_*.py
+
+#linters
+.ruff_cache
