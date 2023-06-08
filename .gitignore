@@ -1,0 +1,22 @@
+# idea folder, uncomment if you don't need it
+.idea
+.idea/.gitignore
+.idea/CeneoScraper.iml
+.idea/inspectionProfiles/profiles_settings.xml
+.idea/misc.xml
+.idea/modules.xml
+.idea/vcs.xml
+
+# mkdocs documentation
+/site
+
+# mypy
+.mypy_cache/
+
+#pytest
+.pytest_cache
+
+#tests
+tests
+*_test.py
+test_*.py
