@@ -33,6 +33,7 @@ nodeenv==1.8.0
 packaging==23.1
 pathspec==0.11.1
 pexpect==4.8.0
+pgzero==1.2.1
 pkginfo==1.9.6
 platformdirs==3.5.1
 poetry==1.5.1
