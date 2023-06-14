@@ -73,8 +73,15 @@ pgzero = "1.2.1"
 poetry = "1.5.1"
 poetry-core = "1.6.1"
 poetry-plugin-export = "1.4.0"
+minimax = "^0.0.2"
 
 
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.black]
+line-length = 100
+
+[tool.ruff]
+line-length = 100

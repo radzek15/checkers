@@ -688,6 +688,17 @@ files = [
 ]
 
 [[package]]
+name = "minimax"
+version = "0.0.2"
+description = "A configurable minimax package"
+optional = false
+python-versions = ">=3.10"
+files = [
+    {file = "minimax-0.0.2-py3-none-any.whl", hash = "sha256:4c2859e29b40d2da827ef60989d19e12640b1fe526a407d9b180ec9e385d58ee"},
+    {file = "minimax-0.0.2.tar.gz", hash = "sha256:7543424dcfe1fe8abc5fc3c5526e54cb560b93dee035096d583832d5346d507f"},
+]
+
+[[package]]
 name = "more-itertools"
 version = "9.1.0"
 description = "More routines for operating on iterables, beyond itertools"
@@ -1648,4 +1659,4 @@ testing = ["big-O", "flake8 (<5)", "jaraco.functools", "jaraco.itertools", "more
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "4a442184edfd6032c2cf5899a53a792ca52effaf3eb4c25f2580ec0ec499eb90"
+content-hash = "425fe080b2c4328dd9961e1634480f5542e1bf8578fa35889b5388f71cfb9da5"
