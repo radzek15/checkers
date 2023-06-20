@@ -1,6 +1,7 @@
 class Piece:
     def __init__(self, details):
         self.details = details
+        self.take = False
 
     def get_details(self):
         return self.details
@@ -20,3 +21,13 @@ class Piece:
 
     def set_is_dame(self, dame):
         self.details[-1] = True if dame else False
+
+    def get_take(self):
+        return self.take
+
+    def set_take(self, take):
+        self.take = take
+
+    @staticmethod
+    def get_row_col(row, col):
+        return row * 4 + col // 2
