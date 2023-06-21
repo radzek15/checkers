@@ -17,10 +17,11 @@ class Piece:
         return self.details[-2]
 
     def is_dame(self):
-        return self.details[-1]
+        return True if self.details[-1] == 'Y' else False
 
     def set_is_dame(self, dame):
-        self.details[-1] = True if dame else False
+        is_dame = 'Y' if dame else "N"
+        self.details = self.details[:-1] + is_dame
 
     def get_take(self):
         return self.take
@@ -49,6 +50,8 @@ class Piece:
     def get_moves(self, board):
         row = board.get_row(int(self.get_position()))
         col = board.get_col(int(self.get_position()))
+        adjacent_squares = self.possible_moves(board)
+        squares = board.get_pieces_by_pos(*adjacent_squares)
 
         def get_taken_pos(piece, pos):
             if piece.get_color() == self.get_color() or pos[0] in range(8) or pos[1] in range(8):
@@ -62,3 +65,20 @@ class Piece:
 
             return None if board.is_busy(must_take) else must_take
 
+        empty_squares = []
+        possible_moves = []
+        for i, s in enumerate(squares):
+            if s is None:
+                empty_squares.append(i)
+            else:
+                if get_taken_pos(s, adjacent_squares[i]) is None:
+                    continue
+                possible_moves.append({'position': str(get_taken_pos(s, adjacent_squares[i])), 'take': True})
+
+        if len(possible_moves) == 0:
+            for i in empty_squares:
+                possible_moves.append({
+                    'position': str(Piece.get_row_col(adjacent_squares[i][0], adjacent_squares[i][1])),
+                    'take': False})
+
+        return possible_moves

@@ -64,4 +64,18 @@ class Board:
                 if piece.get_position == taken:
                     return i
 
-        def dame_move
+        def dame_move(piece):
+            last_row = 0 if self.turn == piece.get_color() else 7
+            if piece.is_dame():
+                return False
+            return last_row == self.get_row(new_pos)
+
+
+
+    def get_winner(self):
+        for piece in self.pieces:
+            if piece.get_color() != self.pieces[0].get_color():
+                break
+            else:
+                return self.pieces[0].get_color()
+        return None
