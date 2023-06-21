@@ -1,5 +1,5 @@
-import pygame as pg
-
-
-def game():
-    pg.init()
+# import pygame as pg
+#
+#
+# def game():
+#     pg.init()

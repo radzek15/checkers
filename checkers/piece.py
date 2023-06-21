@@ -31,3 +31,34 @@ class Piece:
     @staticmethod
     def get_row_col(row, col):
         return row * 4 + col // 2
+
+    def possible_moves(self, board):
+        row = board.get_row(int(self.get_position()))
+        col = board.get_col(int(self.get_position()))
+
+        if self.is_dame():
+            moves = [(row - 1, col - 1), (row - 1, col + 1), (row + 1, col - 1), (row + 1, col + 1)]
+        else:
+            if self.get_color() == board.get_turn():
+                moves = [(row - 1, col - 1), (row - 1, col + 1)]
+            else:
+                moves = [(row + 1, col - 1), (row + 1, col + 1)]
+
+        return list(filter(lambda squares: -1 < squares[0] < 8 and -1 < squares[1] < 8, moves))
+
+    def get_moves(self, board):
+        row = board.get_row(int(self.get_position()))
+        col = board.get_col(int(self.get_position()))
+
+        def get_taken_pos(piece, pos):
+            if piece.get_color() == self.get_color() or pos[0] in range(8) or pos[1] in range(8):
+                return None
+
+            if pos[1] > col:
+                is_take = (2 * pos[0] - row, pos[1] + 1)
+            else:
+                is_take = (2 * pos[0] - row, pos[1] + 1)
+            must_take = (Piece.get_row_col(is_take[0], is_take[1]))
+
+            return None if board.is_busy(must_take) else must_take
+

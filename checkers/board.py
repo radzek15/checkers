@@ -1,3 +1,6 @@
+from piece import Piece
+
+
 class Board:
     def __init__(self, pieces, turn):
         self.pieces = pieces
@@ -11,6 +14,12 @@ class Board:
 
     def get_single_piece(self, index):
         return self.pieces[index]
+
+    def is_busy(self, pos):
+        for piece in self.pieces:
+            if piece.get_position() == str(pos):
+                return True
+        return False
 
     def get_row(self, pos):
         return pos / 4
@@ -48,5 +57,11 @@ class Board:
         def get_take_index(current_pos):
             before_take = (self.get_row(current_pos), self.get_col(current_pos))
             after_take = (self.get_row(new_pos), self.get_col(new_pos))
-            taken = [before_take[0] + ((after_take[0] - before_take[0]) // 2),
-                     before_take[1] + ((after_take[1] - before_take[1]) // 2),]
+            taken = str(Piece.get_row_col(before_take[0] + ((after_take[0] - before_take[0]) // 2),
+                        before_take[1] + ((after_take[1] - before_take[1]) // 2),))
+
+            for i, piece in enumerate(self.pieces):
+                if piece.get_position == taken:
+                    return i
+
+        def dame_move
