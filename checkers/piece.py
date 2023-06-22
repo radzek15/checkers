@@ -29,10 +29,6 @@ class Piece:
     def set_take(self, take):
         self.take = take
 
-    @staticmethod
-    def get_row_col(row, col):
-        return row * 4 + col // 2
-
     def possible_moves(self, board):
         row = board.get_row(int(self.get_position()))
         col = board.get_col(int(self.get_position()))
@@ -82,3 +78,7 @@ class Piece:
                     'take': False})
 
         return possible_moves
+
+    @staticmethod
+    def get_row_col(row, col):
+        return row * 4 + col // 2

@@ -1,4 +1,4 @@
-from piece import Piece
+from .piece import Piece
 
 
 class Board:
@@ -70,7 +70,15 @@ class Board:
                 return False
             return last_row == self.get_row(new_pos)
 
-
+        chosen_piece = self.pieces[index]
+        if is_take(int(chosen_piece.get_position())):
+            self.pieces.pop(get_take_index(int(chosen_piece.get_position())))
+            chosen_piece.set_take(True)
+        else:
+            chosen_piece.set_take(False)
+        if dame_move(chosen_piece):
+            chosen_piece.set_is_dame(True)
+        chosen_piece.set_position(new_pos)
 
     def get_winner(self):
         for piece in self.pieces:
