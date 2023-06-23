@@ -1,8 +1,8 @@
-from .piece import Piece
+from .ai import AI
 from .board import Board
 from .GUI import GUI
 from .hold import Hold
-from .ai import AI
+from .piece import Piece
 
 
 class GameLogic:
@@ -30,10 +30,10 @@ class GameLogic:
         pieces = []
 
         for opponent_piece in range(0, 12):
-            pieces.append(Piece(str(opponent_piece) + 'BN'))
+            pieces.append(Piece(str(opponent_piece) + "BN"))
 
         for player_piece in range(20, 32):
-            pieces.append(Piece(str(player_piece) + 'RN'))
+            pieces.append(Piece(str(player_piece) + "RN"))
 
         self.board = Board(pieces, self.turn)
         self.board_draw = GUI(self.board)
@@ -70,7 +70,7 @@ class GameLogic:
         piece_moves = board_pieces[piece_clicked["index"]].get_moves(self.board)
 
         if has_jump_restraint:
-            piece_moves = list(filter(lambda mv: mv["eats_piece"] == True, piece_moves))
+            piece_moves = list(filter(lambda mv: mv["eats_piece"] is True, piece_moves))
 
         move_marks = []
 
@@ -93,13 +93,17 @@ class GameLogic:
         piece_moved = self.board.get_piece_by_index(moved_index)
 
         if position_released is not None:
-            self.board.move_piece(moved_index, self.board_draw.get_position_by_rect(position_released))
+            self.board.move_piece(
+                moved_index, self.board_draw.get_position_by_rect(position_released)
+            )
             self.board_draw.set_pieces(self.board_draw.get_piece_properties(self.board))
             self.winner = self.board.get_winner()
 
-            jump_moves = list(filter(lambda move: move["eats_piece"] == True, piece_moved.get_moves(self.board)))
+            jump_moves = list(
+                filter(lambda move: move["eats_piece"] is True, piece_moved.get_moves(self.board))
+            )
 
-            if len(jump_moves) == 0 or piece_moved.get_has_eaten() == False:
+            if len(jump_moves) == 0 or piece_moved.get_has_eaten() is False:
                 self.turn = "B" if self.turn == "R" else "R"
 
         self.held_piece = None
@@ -107,7 +111,9 @@ class GameLogic:
 
     def set_held_piece(self, index, piece, mouse_pos):
         surface = self.board_draw.get_surface(piece)
-        offset = GameLogic.get_surface_coords(self.board_draw.get_piece_by_index(index)["rect"], mouse_pos)
+        offset = GameLogic.get_surface_coords(
+            self.board_draw.get_piece_by_index(index)["rect"], mouse_pos
+        )
         self.held_piece = Hold(surface, offset)
 
     def move_ai(self):
@@ -122,15 +128,19 @@ class GameLogic:
                 piece_moved = piece
                 break
         else:
-            raise RuntimeError("AI was supposed to return a move from an existing piece but found none.")
+            raise RuntimeError(
+                "AI was supposed to return a move from an existing piece but found none."
+            )
 
         self.board.move_piece(index_moved, int(optimal_move["position_to"]))
         self.board_draw.set_pieces(self.board_draw.get_piece_properties(self.board))
         self.winner = self.board.get_winner()
 
-        jump_moves = list(filter(lambda move: move["eats_piece"] == True, piece_moved.get_moves(self.board)))
+        jump_moves = list(
+            filter(lambda move: move["eats_piece"] is True, piece_moved.get_moves(self.board))
+        )
 
-        if len(jump_moves) == 0 or piece_moved.get_has_eaten() == False:
+        if len(jump_moves) == 0 or piece_moved.get_has_eaten() is False:
             self.turn = "B" if self.turn == "R" else "R"
 
     @staticmethod

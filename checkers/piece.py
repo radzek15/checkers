@@ -16,7 +16,7 @@ class Piece:
         return self.has_eaten
 
     def is_king(self):
-        return True if self.name[-1] == 'Y' else False
+        return True if self.name[-1] == "Y" else False
 
     def set_position(self, new_position):
         position_index = 1 if len(self.name) == 3 else 2
@@ -34,16 +34,33 @@ class Piece:
         current_row = board.get_row_number(int(self.get_position()))
 
         if self.is_king():
-            all_coords = [(current_row - 1, current_col - 1), (current_row - 1, current_col + 1),
-                          (current_row + 1, current_col - 1), (current_row + 1, current_col + 1)]
+            all_coords = [
+                (current_row - 1, current_col - 1),
+                (current_row - 1, current_col + 1),
+                (current_row + 1, current_col - 1),
+                (current_row + 1, current_col + 1),
+            ]
         else:
             if board.get_color_up() == self.get_color():
-                all_coords = [(current_row - 1, current_col - 1), (current_row - 1, current_col + 1)]
+                all_coords = [
+                    (current_row - 1, current_col - 1),
+                    (current_row - 1, current_col + 1),
+                ]
             else:
-                all_coords = [(current_row + 1, current_col - 1), (current_row + 1, current_col + 1)]
+                all_coords = [
+                    (current_row + 1, current_col - 1),
+                    (current_row + 1, current_col + 1),
+                ]
 
-        return list(filter(lambda coords: coords[0] != -1 and coords[0] != 8 and coords[1] != -1 and coords[1] != 8,
-                           all_coords))
+        return list(
+            filter(
+                lambda coords: coords[0] != -1
+                and coords[0] != 8
+                and coords[1] != -1
+                and coords[1] != 8,
+                all_coords,
+            )
+        )
 
     def get_moves(self, board):
         def get_eat_position(piece, coords):
@@ -82,7 +99,9 @@ class Piece:
 
         if len(possible_moves) == 0:
             for index in empty_squares:
-                new_position = Piece.get_position_with_row_col(possible_coords[index][0], possible_coords[index][1])
+                new_position = Piece.get_position_with_row_col(
+                    possible_coords[index][0], possible_coords[index][1]
+                )
                 possible_moves.append({"position": str(new_position), "eats_piece": False})
 
         return possible_moves

@@ -1,7 +1,9 @@
+from sys import argv, exit
+
 import pygame as pg
 from pygame.locals import *
+
 from checkers.game_logic import GameLogic
-from sys import exit, argv
 
 
 def main(gamemode):
@@ -9,7 +11,7 @@ def main(gamemode):
     PLAYER_COLOR = "R"
     WHITE = (255, 255, 255)
     DISPLAYSURF = pg.display.set_mode((1000, 800))
-    pg.display.set_caption('Checkers')
+    pg.display.set_caption("Checkers")
     fps_clock = pg.time.Clock()
 
     if gamemode == "cpu":
@@ -59,7 +61,7 @@ def main(gamemode):
         fps_clock.tick(30)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     if len(argv) != 2:
         print("Please specify the game mode.")
     else:

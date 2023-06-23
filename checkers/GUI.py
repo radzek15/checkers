@@ -1,4 +1,5 @@
 import pygame as pg
+
 from .piece import Piece
 
 BLACK_PAWN = pg.image.load("images/black_pawn.png")
@@ -32,7 +33,9 @@ class GUI:
             piece_properties = dict()
 
             piece_properties["rect"] = pg.Rect(
-                GUI.get_GUI_position((piece_row, piece_column), SQUARE_DIST, TOPLEFTBORDER), (100, 100))
+                GUI.get_GUI_position((piece_row, piece_column), SQUARE_DIST, TOPLEFTBORDER),
+                (100, 100),
+            )
             piece_properties["color"] = piece.get_color()
             piece_properties["is_king"] = piece.is_king()
 
@@ -57,11 +60,13 @@ class GUI:
                 continue
 
             if piece["is_king"]:
-                display_surface.blit(BLACK_KING if piece["color"] == "B" else RED_KING,
-                                     piece["rect"])
+                display_surface.blit(
+                    BLACK_KING if piece["color"] == "B" else RED_KING, piece["rect"]
+                )
             else:
-                display_surface.blit(BLACK_PAWN if piece["color"] == "B" else RED_PAWN,
-                                     piece["rect"])
+                display_surface.blit(
+                    BLACK_PAWN if piece["color"] == "B" else RED_PAWN, piece["rect"]
+                )
 
     def draw_board(self, display_surface):
         display_surface.blit(BOARD, (0, 0))
@@ -81,7 +86,7 @@ class GUI:
         surfaces = [BLACK_PAWN, RED_PAWN, BLACK_KING, RED_KING]
         surfaces = surfaces[2:] if piece.is_king() else surfaces[:2]
 
-        return surfaces[0] if piece.get_color() == 'B' else surfaces[1]
+        return surfaces[0] if piece.get_color() == "B" else surfaces[1]
 
     def get_move_marks(self):
         return self.move_marks
@@ -94,7 +99,8 @@ class GUI:
             row = position[0]
             column = position[1]
             self.move_marks.append(
-                pg.Rect(GUI.get_GUI_position((row, column), SQUARE_DIST, TOPLEFTBORDER), (100, 100)))
+                pg.Rect(GUI.get_GUI_position((row, column), SQUARE_DIST, TOPLEFTBORDER), (100, 100))
+            )
 
     def get_position_by_rect(self, rect):
         return GUI.get_piece_position((rect.x, rect.y), SQUARE_DIST, TOPLEFTBORDER)

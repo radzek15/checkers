@@ -66,10 +66,15 @@ class Board:
 
     def move_piece(self, moved_index, new_position):
         def is_eat_movement(current_position):
-            return abs(self.get_row_number(current_position) - self.get_row_number(new_position)) != 1
+            return (
+                abs(self.get_row_number(current_position) - self.get_row_number(new_position)) != 1
+            )
 
         def get_eaten_index(current_position):
-            current_coords = [self.get_row_number(current_position), self.get_col_number(current_position)]
+            current_coords = [
+                self.get_row_number(current_position),
+                self.get_col_number(current_position),
+            ]
             new_coords = [self.get_row_number(new_position), self.get_col_number(new_position)]
             eaten_coords = [current_coords[0], current_coords[1]]
 
