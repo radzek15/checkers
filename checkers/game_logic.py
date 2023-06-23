@@ -44,7 +44,7 @@ class GameLogic:
         self.board_draw.draw_pieces(display_surface)
 
         if self.held_piece is not None:
-            self.held_piece.draw_piece(display_surface)
+            self.held_piece.place_piece(display_surface)
 
     def hold_piece(self, mouse_pos):
         piece_clicked = self.board_draw.get_piece_on_mouse(mouse_pos)
@@ -57,7 +57,6 @@ class GameLogic:
         if piece_clicked["piece"]["color"] != self.turn:
             return
 
-        # Determines if player has a jump restraint
         for piece in board_pieces:
             for move in piece.get_moves(self.board):
                 if move["eats_piece"]:
@@ -65,7 +64,6 @@ class GameLogic:
                         has_jump_restraint = True
             else:
                 continue
-            break
 
         piece_moves = board_pieces[piece_clicked["index"]].get_moves(self.board)
 

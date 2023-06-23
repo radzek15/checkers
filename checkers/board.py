@@ -64,7 +64,7 @@ class Board:
 
         return results
 
-    def move_piece(self, moved_index, new_position):
+    def move_piece(self, move_index, new_position):
         def is_eat_movement(current_position):
             return (
                 abs(self.get_row_number(current_position) - self.get_row_number(new_position)) != 1
@@ -87,17 +87,14 @@ class Board:
                 if piece.get_position() == eaten_position:
                     return index
 
-        def is_king_movement(piece):
-            if piece.is_king():
+        def is_dame_movement(piece):
+            if piece.is_dame():
                 return False
 
-            end_row = self.get_row_number(new_position)
-            piece_color = piece.get_color()
-            king_row = 0 if self.color_up == piece_color else 7
+            dame_row = 0 if self.color_up == piece.get_color() else 7
+            return self.get_row_number(new_position) == dame_row
 
-            return end_row == king_row
-
-        piece_to_move = self.pieces[moved_index]
+        piece_to_move = self.pieces[move_index]
 
         if is_eat_movement(int(piece_to_move.get_position())):
             self.pieces.pop(get_eaten_index(int(piece_to_move.get_position())))
@@ -105,8 +102,8 @@ class Board:
         else:
             piece_to_move.set_has_eaten(False)
 
-        if is_king_movement(piece_to_move):
-            piece_to_move.set_is_king(True)
+        if is_dame_movement(piece_to_move):
+            piece_to_move.set_is_dame(True)
 
         piece_to_move.set_position(new_position)
 

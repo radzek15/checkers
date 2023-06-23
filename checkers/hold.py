@@ -7,10 +7,9 @@ class Hold:
         self.draw_rect = self.surface.get_rect()
         self.offset = offset
 
-    def draw_piece(self, display_surface):
-        mouse_pos = get_pos()
-        self.draw_rect.x = mouse_pos[0] + self.offset[0]
-        self.draw_rect.y = mouse_pos[1] + self.offset[1]
+    def place_piece(self, display_surface):
+        self.draw_rect.x = get_pos()[0] + self.offset[0]
+        self.draw_rect.y = get_pos()[1] + self.offset[1]
 
         display_surface.blit(self.surface, self.draw_rect)
 

@@ -4,8 +4,8 @@ from .piece import Piece
 
 BLACK_PAWN = pg.image.load("images/black_pawn.png")
 RED_PAWN = pg.image.load("images/red_pawn.png")
-BLACK_KING = pg.image.load("images/black_dame.png")
-RED_KING = pg.image.load("images/red_dame.png")
+BLACK_DAME = pg.image.load("images/black_dame.png")
+RED_DAME = pg.image.load("images/red_dame.png")
 BOARD = pg.image.load("images/board.svg")
 MARK = pg.image.load("images/mark.png")
 
@@ -37,7 +37,7 @@ class GUI:
                 (100, 100),
             )
             piece_properties["color"] = piece.get_color()
-            piece_properties["is_king"] = piece.is_king()
+            piece_properties["is_dame"] = piece.is_dame()
 
             pieces.append(piece_properties)
 
@@ -59,9 +59,9 @@ class GUI:
             if index == self.hidden_piece:
                 continue
 
-            if piece["is_king"]:
+            if piece["is_dame"]:
                 display_surface.blit(
-                    BLACK_KING if piece["color"] == "B" else RED_KING, piece["rect"]
+                    BLACK_DAME if piece["color"] == "B" else RED_DAME, piece["rect"]
                 )
             else:
                 display_surface.blit(
@@ -83,8 +83,8 @@ class GUI:
         return None
 
     def get_surface(self, piece):
-        surfaces = [BLACK_PAWN, RED_PAWN, BLACK_KING, RED_KING]
-        surfaces = surfaces[2:] if piece.is_king() else surfaces[:2]
+        surfaces = [BLACK_PAWN, RED_PAWN, BLACK_DAME, RED_DAME]
+        surfaces = surfaces[2:] if piece.is_dame() else surfaces[:2]
 
         return surfaces[0] if piece.get_color() == "B" else surfaces[1]
 
@@ -102,7 +102,8 @@ class GUI:
                 pg.Rect(GUI.get_GUI_position((row, column), SQUARE_DIST, TOPLEFTBORDER), (100, 100))
             )
 
-    def get_position_by_rect(self, rect):
+    @staticmethod
+    def get_position_by_rect(rect):
         return GUI.get_piece_position((rect.x, rect.y), SQUARE_DIST, TOPLEFTBORDER)
 
     @staticmethod

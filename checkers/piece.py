@@ -15,16 +15,16 @@ class Piece:
     def get_has_eaten(self):
         return self.has_eaten
 
-    def is_king(self):
+    def is_dame(self):
         return True if self.name[-1] == "Y" else False
 
     def set_position(self, new_position):
         position_index = 1 if len(self.name) == 3 else 2
         self.name = str(new_position) + self.name[position_index:]
 
-    def set_is_king(self, new_is_king):
-        is_king = "Y" if new_is_king else "N"
-        self.name = self.name[:-1] + is_king
+    def set_is_dame(self, dame):
+        is_dame = "Y" if dame else "N"
+        self.name = self.name[:-1] + is_dame
 
     def set_has_eaten(self, has_eaten):
         self.has_eaten = has_eaten
@@ -33,7 +33,7 @@ class Piece:
         current_col = board.get_col_number(int(self.get_position()))
         current_row = board.get_row_number(int(self.get_position()))
 
-        if self.is_king():
+        if self.is_dame():
             all_coords = [
                 (current_row - 1, current_col - 1),
                 (current_row - 1, current_col + 1),
@@ -87,7 +87,6 @@ class Piece:
         empty_squares = []
 
         for index, square in enumerate(close_squares):
-            # Empty squares are potential moves. Pieces are potential eating movements.
             if square is None:
                 empty_squares.append(index)
             else:
