@@ -5,4 +5,4 @@
 </div>
 
 <h3>in collaboration with: </h3>
-<a href= "https://github.com/KarolKaczorowskiDev1"></a>
+<a href="https://github.com/KarolKaczorowskiDev1">KarolKaczorowskiDev1</a>
