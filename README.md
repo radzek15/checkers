@@ -4,11 +4,5 @@
   <p align="center">Game of checkers</p>
 </div>
 
-
-
-
-
-
-
 <h3>in collaboration with: </h3>
 <a href= "https://github.com/KarolKaczorowskiDev1"></a>
