@@ -2,88 +2,116 @@ from .piece import Piece
 
 
 class Board:
-    def __init__(self, pieces, turn):
+    def __init__(self, pieces, color_up):
         self.pieces = pieces
-        self.turn = turn
+        self.color_up = color_up
+
+    def get_color_up(self):
+        return self.color_up
 
     def get_pieces(self):
         return self.pieces
 
-    def get_turn(self):
-        return self.turn
-
-    def get_single_piece(self, index):
+    def get_piece_by_index(self, index):
         return self.pieces[index]
 
-    def is_busy(self, pos):
+    def has_piece(self, position):
+        string_pos = str(position)
+
         for piece in self.pieces:
-            if piece.get_position() == str(pos):
+            if piece.get_position() == string_pos:
                 return True
+
         return False
 
-    def get_row(self, pos):
-        return pos / 4
+    def get_row_number(self, position):
+        return position // 4
 
-    def get_col(self, pos):
-        row_check = self.get_row(pos) % 2 != 0
-        return ((pos % 4) * 2 + 1) if not row_check else ((pos % 4) * 2)
+    def get_col_number(self, position):
+        remainder = position % 4
+        column_position = remainder * 2
+        is_row_odd = not (self.get_row_number(position) % 2 == 0)
+        return column_position + 1 if is_row_odd else column_position
 
-    def get_pieces_by_row(self, row_num):
-        row_pos = list(map((lambda pos: str(pos + (4 * row_num))), [0, 1, 2, 3]))
-        return {i for i in self.pieces if i.get_position() in row_pos}
+    def get_row(self, row_number):
+        row_pos = [0, 1, 2, 3]
+        row_pos = list(map((lambda pos: str(pos + (4 * row_number))), row_pos))
+        row = []
 
-    def get_pieces_by_pos(self, *positions):
-        rows = {}
+        for piece in self.pieces:
+            if piece.get_position() in row_pos:
+                row.append(piece)
+
+        return set(row)
+
+    def get_pieces_by_coords(self, *coords):
+        row_memory = dict()
         results = []
 
-        for pos in positions:
-            if pos[0] in rows:
-                row = rows[pos[0]]
+        for coord_pair in coords:
+            if coord_pair[0] in row_memory:
+                current_row = row_memory[coord_pair[0]]
             else:
-                row = self.get_row(pos[0])
-                rows[pos[0]] = row
+                current_row = self.get_row(coord_pair[0])
+                row_memory[coord_pair[0]] = current_row
 
-            for piece in row:
-                if self.get_col(int(piece.get_position())) == pos[1]:
+            for piece in current_row:
+                if self.get_col_number(int(piece.get_position())) == coord_pair[1]:
                     results.append(piece)
                     break
             else:
                 results.append(None)
 
-    def move(self, index, new_pos):
-        def is_take(current_pos):
-            return abs(self.get_row(current_pos) - self.get_row(new_pos) != 1)
+        return results
 
-        def get_take_index(current_pos):
-            before_take = (self.get_row(current_pos), self.get_col(current_pos))
-            after_take = (self.get_row(new_pos), self.get_col(new_pos))
-            taken = str(Piece.get_row_col(before_take[0] + ((after_take[0] - before_take[0]) // 2),
-                        before_take[1] + ((after_take[1] - before_take[1]) // 2),))
+    def move_piece(self, moved_index, new_position):
+        def is_eat_movement(current_position):
+            return abs(self.get_row_number(current_position) - self.get_row_number(new_position)) != 1
 
-            for i, piece in enumerate(self.pieces):
-                if piece.get_position == taken:
-                    return i
+        def get_eaten_index(current_position):
+            current_coords = [self.get_row_number(current_position), self.get_col_number(current_position)]
+            new_coords = [self.get_row_number(new_position), self.get_col_number(new_position)]
+            eaten_coords = [current_coords[0], current_coords[1]]
 
-        def dame_move(piece):
-            last_row = 0 if self.turn == piece.get_color() else 7
-            if piece.is_dame():
+            eaten_coords[0] += (new_coords[0] - current_coords[0]) // 2
+            eaten_coords[1] += (new_coords[1] - current_coords[1]) // 2
+
+            eaten_position = str(Piece.get_position_with_row_col(eaten_coords[0], eaten_coords[1]))
+
+            for index, piece in enumerate(self.pieces):
+                if piece.get_position() == eaten_position:
+                    return index
+
+        def is_king_movement(piece):
+            if piece.is_king():
                 return False
-            return last_row == self.get_row(new_pos)
 
-        chosen_piece = self.pieces[index]
-        if is_take(int(chosen_piece.get_position())):
-            self.pieces.pop(get_take_index(int(chosen_piece.get_position())))
-            chosen_piece.set_take(True)
+            end_row = self.get_row_number(new_position)
+            piece_color = piece.get_color()
+            king_row = 0 if self.color_up == piece_color else 7
+
+            return end_row == king_row
+
+        piece_to_move = self.pieces[moved_index]
+
+        if is_eat_movement(int(piece_to_move.get_position())):
+            self.pieces.pop(get_eaten_index(int(piece_to_move.get_position())))
+            piece_to_move.set_has_eaten(True)
         else:
-            chosen_piece.set_take(False)
-        if dame_move(chosen_piece):
-            chosen_piece.set_is_dame(True)
-        chosen_piece.set_position(new_pos)
+            piece_to_move.set_has_eaten(False)
+
+        if is_king_movement(piece_to_move):
+            piece_to_move.set_is_king(True)
+
+        piece_to_move.set_position(new_position)
 
     def get_winner(self):
+        current_color = self.pieces[0].get_color()
+
         for piece in self.pieces:
-            if piece.get_color() != self.pieces[0].get_color():
+            if piece.get_color() != current_color:
                 break
-            else:
-                return self.pieces[0].get_color()
+        else:
+            return current_color
+
         return None

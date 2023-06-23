@@ -3,105 +3,112 @@ from .piece import Piece
 
 BLACK_PAWN = pg.image.load("images/black_pawn.png")
 RED_PAWN = pg.image.load("images/red_pawn.png")
-BLACK_DAME = pg.image.load("images/black_dame.png")
-RED_DAME = pg.image.load("images/red_dame.png")
+BLACK_KING = pg.image.load("images/black_dame.png")
+RED_KING = pg.image.load("images/red_dame.png")
 BOARD = pg.image.load("images/board.svg")
 MARK = pg.image.load("images/mark.png")
 
-DIST = 100
-TOP_LEFT = (0, 0)
+SQUARE_DIST = 100
+TOPLEFTBORDER = (0, 0)
 
 
 class GUI:
     def __init__(self, board):
-        self.pieces = self.get_piece_details(board)
-        self.del_piece = -1
-        self.moves = []
+        self.pieces = self.get_piece_properties(board)
+        self.hidden_piece = -1
+        self.move_marks = []
 
-    def set_pieces(self, all_pieces):
-        self.pieces = all_pieces
+    def set_pieces(self, piece_list):
+        self.pieces = piece_list
 
-    def get_piece_details(self, board):
-        starting_pieces = board.get_pieces()
+    def get_piece_properties(self, board):
+        initial_pieces = board.get_pieces()
         pieces = []
 
-        for p in starting_pieces:
-            p_pos = int(p.get_position())
-            p_row = board.get_row(p_pos)
-            p_col = board.get_col(p_pos)
-            p_details = {
-                "rect": pg.Rect(GUI.get_GUI_position((p_row, p_col), DIST, TOP_LEFT), (50, 50)),
-                "color": p.get_color(),
-                "is_dame": p.is_dame()
-            }
+        for piece in initial_pieces:
+            piece_position = int(piece.get_position())
+            piece_row = board.get_row_number(piece_position)
+            piece_column = board.get_col_number(piece_position)
+            piece_properties = dict()
 
-            pieces.append(p_details)
+            piece_properties["rect"] = pg.Rect(
+                GUI.get_GUI_position((piece_row, piece_column), SQUARE_DIST, TOPLEFTBORDER), (100, 100))
+            piece_properties["color"] = piece.get_color()
+            piece_properties["is_king"] = piece.is_king()
+
+            pieces.append(piece_properties)
 
         return pieces
 
-    def get_single_piece(self, index):
+    def get_piece_by_index(self, index):
         return self.pieces[index]
 
-    def delete_piece(self, index):
-        self.del_piece = index
+    def hide_piece(self, index):
+        self.hidden_piece = index
 
-    def load_piece(self):
-        loaded_piece = self.del_piece
-        self.del_piece = -1
-        return loaded_piece
+    def show_piece(self):
+        piece_shown = self.hidden_piece
+        self.hidden_piece = -1
+        return piece_shown
 
-    def place_pieces(self, surface):
-        for i, piece in enumerate(self.pieces):
-            if i == self.del_piece:
+    def draw_pieces(self, display_surface):
+        for index, piece in enumerate(self.pieces):
+            if index == self.hidden_piece:
                 continue
 
-            if piece["is_dame"]:
-                surface.blit(BLACK_DAME if piece["color"] == 'B' else RED_DAME, piece["rect"])
+            if piece["is_king"]:
+                display_surface.blit(BLACK_KING if piece["color"] == "B" else RED_KING,
+                                     piece["rect"])
             else:
-                surface.blit(BLACK_PAWN if piece["color"] == 'B' else RED_PAWN, piece["rect"])
+                display_surface.blit(BLACK_PAWN if piece["color"] == "B" else RED_PAWN,
+                                     piece["rect"])
 
-    def get_moves(self):
-        return self.moves
+    def draw_board(self, display_surface):
+        display_surface.blit(BOARD, (0, 0))
 
-    def set_moves(self, all_pos):
-        if len(all_pos) == 0:
-            self.moves = []
+        if len(self.move_marks) != 0:
+            for rect in self.move_marks:
+                display_surface.blit(MARK, rect)
 
-        for pos in all_pos:
-            self.moves.append(pg.Rect(GUI.get_GUI_position((pos[0], pos[1]), DIST, TOP_LEFT), (50, 50)))
+    def get_piece_on_mouse(self, mouse_pos):
+        for index, piece in enumerate(self.pieces):
+            if piece["rect"].collidepoint(mouse_pos):
+                return {"index": index, "piece": piece}
 
-    def place_board(self, surface):
-        surface.blit(BOARD, (0, 0))
-
-        if len(self.moves) != 0:
-            for pos in self.moves:
-                surface.blit(MARK, pos)
-
-    def get_piece_with_mouse(self, mouse):
-        for i, piece in enumerate(self.pieces):
-            if piece["rect"].collidepoint(mouse):
-                return {"index": i, "piece": piece}
         return None
 
-    @staticmethod
-    def get_position_with_rect(rect):
-        return GUI.get_piece_position((rect.x, rect.y), DIST, TOP_LEFT)
+    def get_surface(self, piece):
+        surfaces = [BLACK_PAWN, RED_PAWN, BLACK_KING, RED_KING]
+        surfaces = surfaces[2:] if piece.is_king() else surfaces[:2]
 
-    @staticmethod
-    def get_surface(piece):
-        surfaces = [BLACK_DAME, RED_DAME] if piece.is_dame() else [BLACK_PAWN, RED_PAWN]
         return surfaces[0] if piece.get_color() == 'B' else surfaces[1]
+
+    def get_move_marks(self):
+        return self.move_marks
+
+    def set_move_marks(self, position_list):
+        if len(position_list) == 0:
+            self.move_marks = []
+
+        for position in position_list:
+            row = position[0]
+            column = position[1]
+            self.move_marks.append(
+                pg.Rect(GUI.get_GUI_position((row, column), SQUARE_DIST, TOPLEFTBORDER), (100, 100)))
+
+    def get_position_by_rect(self, rect):
+        return GUI.get_piece_position((rect.x, rect.y), SQUARE_DIST, TOPLEFTBORDER)
 
     @staticmethod
     def get_GUI_position(pos, dist, top_left):
-        x_pos = top_left[0] + 2*dist*(pos[1]//2) if pos[0] % 2 == 0 else top_left[0] + 2*dist*(pos[1]//2) + dist
+        x_pos = top_left[0] + dist * (pos[1] - (pos[0] % 2) // 2)
         y_pos = top_left[1] + dist * pos[0]
 
         return x_pos, y_pos
 
     @staticmethod
     def get_piece_position(pos, dist, top_left):
-        row = (pos[0] - top_left[0]) // dist
-        col = (pos[1] - top_left[1]) // dist
+        row = (pos[1] - top_left[1]) // dist
+        col = (pos[0] - top_left[0]) // dist
 
-        return Piece.get_row_col(row, col)
+        return Piece.get_position_with_row_col(row, col)

@@ -1,84 +1,92 @@
 class Piece:
-    def __init__(self, details):
-        self.details = details
-        self.take = False
+    def __init__(self, name):
+        self.name = name
+        self.has_eaten = False
 
-    def get_details(self):
-        return self.details
+    def get_name(self):
+        return self.name
 
     def get_position(self):
-        return self.details[:-2]
-
-    def set_position(self, new_position):
-        pos_index = 1 if len(self.details) == 3 else 2
-        self.details = str(new_position) + self.details[pos_index:]
+        return self.name[:-2]
 
     def get_color(self):
-        return self.details[-2]
+        return self.name[-2]
 
-    def is_dame(self):
-        return True if self.details[-1] == 'Y' else False
+    def get_has_eaten(self):
+        return self.has_eaten
 
-    def set_is_dame(self, dame):
-        is_dame = 'Y' if dame else "N"
-        self.details = self.details[:-1] + is_dame
+    def is_king(self):
+        return True if self.name[-1] == 'Y' else False
 
-    def get_take(self):
-        return self.take
+    def set_position(self, new_position):
+        position_index = 1 if len(self.name) == 3 else 2
+        self.name = str(new_position) + self.name[position_index:]
 
-    def set_take(self, take):
-        self.take = take
+    def set_is_king(self, new_is_king):
+        is_king = "Y" if new_is_king else "N"
+        self.name = self.name[:-1] + is_king
 
-    def possible_moves(self, board):
-        row = board.get_row(int(self.get_position()))
-        col = board.get_col(int(self.get_position()))
+    def set_has_eaten(self, has_eaten):
+        self.has_eaten = has_eaten
 
-        if self.is_dame():
-            moves = [(row - 1, col - 1), (row - 1, col + 1), (row + 1, col - 1), (row + 1, col + 1)]
+    def get_adjacent_squares(self, board):
+        current_col = board.get_col_number(int(self.get_position()))
+        current_row = board.get_row_number(int(self.get_position()))
+
+        if self.is_king():
+            all_coords = [(current_row - 1, current_col - 1), (current_row - 1, current_col + 1),
+                          (current_row + 1, current_col - 1), (current_row + 1, current_col + 1)]
         else:
-            if self.get_color() == board.get_turn():
-                moves = [(row - 1, col - 1), (row - 1, col + 1)]
+            if board.get_color_up() == self.get_color():
+                all_coords = [(current_row - 1, current_col - 1), (current_row - 1, current_col + 1)]
             else:
-                moves = [(row + 1, col - 1), (row + 1, col + 1)]
+                all_coords = [(current_row + 1, current_col - 1), (current_row + 1, current_col + 1)]
 
-        return list(filter(lambda squares: -1 < squares[0] < 8 and -1 < squares[1] < 8, moves))
+        return list(filter(lambda coords: coords[0] != -1 and coords[0] != 8 and coords[1] != -1 and coords[1] != 8,
+                           all_coords))
 
     def get_moves(self, board):
-        row = board.get_row(int(self.get_position()))
-        col = board.get_col(int(self.get_position()))
-        adjacent_squares = self.possible_moves(board)
-        squares = board.get_pieces_by_pos(*adjacent_squares)
-
-        def get_taken_pos(piece, pos):
-            if piece.get_color() == self.get_color() or pos[0] in range(8) or pos[1] in range(8):
+        def get_eat_position(piece, coords):
+            if (piece.get_color() == own_color) or (coords[0] in (0, 7)) or (coords[1] in (0, 7)):
                 return None
 
-            if pos[1] > col:
-                is_take = (2 * pos[0] - row, pos[1] + 1)
+            if coords[1] > current_col:
+                position_to_eat = (coords[0] + (coords[0] - current_row), coords[1] + 1)
             else:
-                is_take = (2 * pos[0] - row, pos[1] + 1)
-            must_take = (Piece.get_row_col(is_take[0], is_take[1]))
+                position_to_eat = (coords[0] + (coords[0] - current_row), coords[1] - 1)
 
-            return None if board.is_busy(must_take) else must_take
+            position_num = Piece.get_position_with_row_col(position_to_eat[0], position_to_eat[1])
 
-        empty_squares = []
+            return None if board.has_piece(position_num) else position_num
+
+        current_col = board.get_col_number(int(self.get_position()))
+        current_row = board.get_row_number(int(self.get_position()))
         possible_moves = []
-        for i, s in enumerate(squares):
-            if s is None:
-                empty_squares.append(i)
+        own_color = self.get_color()
+
+        possible_coords = self.get_adjacent_squares(board)
+
+        close_squares = board.get_pieces_by_coords(*possible_coords)
+        empty_squares = []
+
+        for index, square in enumerate(close_squares):
+            # Empty squares are potential moves. Pieces are potential eating movements.
+            if square is None:
+                empty_squares.append(index)
             else:
-                if get_taken_pos(s, adjacent_squares[i]) is None:
+                position_to_eat = get_eat_position(square, possible_coords[index])
+                if position_to_eat is None:
                     continue
-                possible_moves.append({'position': str(get_taken_pos(s, adjacent_squares[i])), 'take': True})
+
+                possible_moves.append({"position": str(position_to_eat), "eats_piece": True})
 
         if len(possible_moves) == 0:
-            for i in empty_squares:
-                possible_moves.append({
-                    'position': str(Piece.get_row_col(adjacent_squares[i][0], adjacent_squares[i][1])),
-                    'take': False})
+            for index in empty_squares:
+                new_position = Piece.get_position_with_row_col(possible_coords[index][0], possible_coords[index][1])
+                possible_moves.append({"position": str(new_position), "eats_piece": False})
 
         return possible_moves
 
     @staticmethod
-    def get_row_col(row, col):
+    def get_position_with_row_col(row, col):
         return row * 4 + col // 2
