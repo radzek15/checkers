@@ -4,4 +4,10 @@
   <p align="center">Game of checkers</p>
 </div>
 
+
+
+
+
+
+
 in collaboration with: KarolKaczorowskiDev1
