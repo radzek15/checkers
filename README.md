@@ -3,13 +3,13 @@
   <h1 align="center">Checkers</h1>
   <p align="justify">The Checkers Game is an interactive and engaging Python project built using the Pygame library. 
                     It offers two exciting gameplay modes - Player vs Player (PvP) and Player vs CPU. In the latter mode, 
-                    the CPU is implemented using the powerful minimax algorithm, providing players with a challenging and competitive experience.</p></div>
+                    the CPU is implemented using the minimax algorithm, providing players with a challenging and competitive experience.</p></div>
 <div align="justify">
 <p align="center"> 
   
 ## Demo
 
-https://github.com/radzek15/checkers/assets/79796741/eb772dd2-8f39-436c-ae0f-d8de9b59d43b
+![sample_movie](https://github.com/radzek15/checkers/assets/79796741/616962c2-9c88-46db-8093-7359ee44c3ec)
 
 ## Features
 
