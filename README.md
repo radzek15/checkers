@@ -49,4 +49,4 @@ Ultimately, my goal is to create a comprehensive and enjoyable Checkers game tha
 
 ## License
 
-[MIT](https://github.com/radzek15/checkers/blob/master/LICENSE)
+checkers is licensed under the [MIT](https://github.com/radzek15/checkers/blob/master/LICENSE). Feel free to use, modify, and distribute the code as per the terms of the license.
