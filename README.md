@@ -49,4 +49,4 @@ Ultimately, my goal is to create a comprehensive and enjoyable Checkers game tha
 
 ## License
 
-[MIT](https://choosealicense.com/licenses/mit/)
+[MIT](https://github.com/radzek15/checkers/blob/master/LICENSE)
