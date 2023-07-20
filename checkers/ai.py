@@ -8,62 +8,62 @@ class AI:
     def __init__(self, color):
         self.color = color
 
-    def minimax(self, current_board, is_maximizing, depth, turn):
-        if depth == 0 or current_board.get_winner() is not None:
-            return self.get_value(current_board)
+    def minimax(self, board, is_maximizing, depth, turn):
+        if depth == 0 or board.get_winner() is not None:
+            return self.get_value(board)
 
         next_turn = "B" if turn == "R" else "R"
-        board_color_up = current_board.get_color_up()
-        current_pieces = current_board.get_pieces()
-        piece_moves = list(
+        board_color_up = board.get_color_up()
+        ai_pieces = board.get_pieces()
+        ai_moves = list(
             map(
-                lambda piece: piece.get_moves(current_board)
+                lambda piece: piece.get_moves(board)
                 if piece.get_color() == turn
                 else False,
-                current_pieces,
+                ai_pieces,
             )
         )
 
         if is_maximizing:
             maximum = -999
-            for index, moves in enumerate(piece_moves):
+            for index, moves in enumerate(ai_moves):
                 if moves is False:
                     continue
 
                 for move in moves:
-                    aux_board = Board(deepcopy(current_pieces), board_color_up)
+                    aux_board = Board(deepcopy(ai_pieces), board_color_up)
                     aux_board.move_piece(index, int(move["position"]))
                     maximum = max(self.minimax(aux_board, False, depth - 1, next_turn), maximum)
 
             return maximum
         else:
             minimum = 999
-            for index, moves in enumerate(piece_moves):
+            for index, moves in enumerate(ai_moves):
                 if moves is False:
                     continue
 
                 for move in moves:
-                    aux_board = Board(deepcopy(current_pieces), board_color_up)
+                    aux_board = Board(deepcopy(ai_pieces), board_color_up)
                     aux_board.move_piece(index, int(move["position"]))
                     minimum = min(self.minimax(aux_board, True, depth - 1, next_turn), minimum)
 
             return minimum
 
-    def get_move(self, current_board):
-        board_color_up = current_board.get_color_up()
-        current_pieces = current_board.get_pieces()
+    def get_move(self, board):
+        board_color_up = board.get_color_up()
+        pieces = board.get_pieces()
         next_turn = "R" if self.color == "B" else "B"
-        player_pieces = list(
-            map(lambda piece: piece if piece.get_color() == self.color else False, current_pieces)
+        ai_pieces = list(
+            map(lambda piece: piece if piece.get_color() == self.color else False, pieces)
         )
         possible_moves = []
         move_scores = []
 
-        for index, piece in enumerate(player_pieces):
+        for index, piece in enumerate(ai_pieces):
             if piece is False:
                 continue
 
-            for move in piece.get_moves(current_board):
+            for move in piece.get_moves(board):
                 possible_moves.append({"piece": index, "move": move})
 
         jump_moves = list(filter(lambda mv: mv["move"]["eats_piece"] is True, possible_moves))
@@ -72,7 +72,7 @@ class AI:
             possible_moves = jump_moves
 
         for move in possible_moves:
-            aux_board = Board(deepcopy(current_pieces), board_color_up)
+            aux_board = Board(deepcopy(pieces), board_color_up)
             aux_board.move_piece(move["piece"], int(move["move"]["position"]))
             move_scores.append(self.minimax(aux_board, False, 2, next_turn))
 
@@ -86,7 +86,7 @@ class AI:
         move_chosen = choice(best_moves)
         return {
             "position_to": move_chosen["move"]["position"],
-            "position_from": player_pieces[move_chosen["piece"]].get_position(),
+            "position_from": ai_pieces[move_chosen["piece"]].get_position(),
         }
 
     def get_value(self, board):
@@ -99,12 +99,12 @@ class AI:
                 return -2
 
         total_pieces = len(board_pieces)
-        player_pieces = len(
+        ai_pieces = len(
             list(filter(lambda piece: piece.get_color() == self.color, board_pieces))
         )
-        opponent_pieces = total_pieces - player_pieces
+        player_pieces = total_pieces - ai_pieces
 
-        if player_pieces == opponent_pieces:
+        if ai_pieces == player_pieces:
             return 0
 
-        return 1 if player_pieces > opponent_pieces else -1
+        return 1 if ai_pieces > player_pieces else -1

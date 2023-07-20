@@ -2,12 +2,12 @@ import pygame as pg
 
 from .piece import Piece
 
-BLACK_PAWN = pg.image.load("images/black_pawn.png")
-RED_PAWN = pg.image.load("images/red_pawn.png")
-BLACK_DAME = pg.image.load("images/black_dame.png")
-RED_DAME = pg.image.load("images/red_dame.png")
-BOARD = pg.image.load("images/board.svg")
-MARK = pg.image.load("images/mark.png")
+BLACK_PAWN = pg.image.load("static/black_pawn.png")
+RED_PAWN = pg.image.load("static/red_pawn.png")
+BLACK_DAME = pg.image.load("static/black_dame.png")
+RED_DAME = pg.image.load("static/red_dame.png")
+BOARD = pg.image.load("static/board.svg")
+MARK = pg.image.load("static/mark.png")
 
 SQUARE_DIST = 100
 TOPLEFTBORDER = (0, 0)
@@ -99,7 +99,7 @@ class GUI:
             row = position[0]
             column = position[1]
             self.move_marks.append(
-                pg.Rect(GUI.get_GUI_position((row, column), SQUARE_DIST, TOPLEFTBORDER), (100, 100))
+                pg.Rect(GUI.get_GUI_position((row, column), SQUARE_DIST, (25, 25)), (50, 50))
             )
 
     @staticmethod

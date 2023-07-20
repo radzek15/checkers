@@ -31,7 +31,7 @@ class Board:
         remainder = position % 4
         column_position = remainder * 2
         is_row_odd = not (self.get_row_number(position) % 2 == 0)
-        return column_position + 1 if is_row_odd else column_position
+        return column_position if is_row_odd else column_position + 1
 
     def get_row(self, row_number):
         row_pos = [0, 1, 2, 3]
