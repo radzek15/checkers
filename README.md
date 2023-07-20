@@ -27,7 +27,7 @@ https://github.com/radzek15/checkers/assets/79796741/eb772dd2-8f39-436c-ae0f-d8d
     * `git clone https://github.com/radzek15/checkers`
   * Create virtual environment and install dependencies:
     * `cd checkers`
-    * `python -m venvv venv`
+    * `python -m venv venv`
     * Windows: `.\venv\Scripts\activate`, Linux/macOS: `source venv/bin/activate`
     * `pip install -r requirements.txt`
   * Eventually run tests:
