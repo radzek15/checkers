@@ -4,10 +4,14 @@
   <p align="justify">The Checkers Game is an interactive and engaging Python project built using the Pygame library. 
                     It offers two exciting gameplay modes - Player vs Player (PvP) and Player vs CPU. In the latter mode, 
                     the CPU is implemented using the powerful minimax algorithm, providing players with a challenging and competitive experience.</p></div>
-
+<div align="justify">
+<p align="center"> 
+  
+## Demo
 
 https://github.com/radzek15/checkers/assets/79796741/eb772dd2-8f39-436c-ae0f-d8de9b59d43b
 
+## Features
 
 | Feature                  | Description                                                                                                                                                                                                                                                                                                  |
 |--------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -17,11 +21,7 @@ https://github.com/radzek15/checkers/assets/79796741/eb772dd2-8f39-436c-ae0f-d8d
 | Highlighting Valid Moves | <p align="justify">The game provides users with a useful feature to highlight valid moves for each selected piece. This feature helps players to make informed decisions and strategize their moves effectively.</p>                                                                                         |
 | Visual Feedback          | <p align="justify">Players receive visual feedback for each player turn and winning the game. This enhances the overall gaming experience and adds excitement to each move.</p>                                                                                                                              |
 
-<div align="justify">
-<p align="center"> 
-
-### Usage:
-</p>
+## Usage:
 
   * Firstly clone the repo with this command:
     * `git clone https://github.com/radzek15/checkers`
@@ -42,5 +42,11 @@ In the future, I plan to expand this Checkers game to be challenging for more ex
 Ultimately, my goal is to create a comprehensive and enjoyable Checkers game that appeals to players of all levels, from novices to seasoned experts. With each update, I look forward to delivering new features and improvements that keep the game fresh and exciting for everyone.
 </div>
 
-<h3>in collaboration with: </h3>
-<a href="https://github.com/KarolKaczorowskiDev1">Karol Kaczorowski</a>
+## Authors
+- [@radzek15](https://github.com/radzek15)
+- [@KarolKaczorowskiDev1](https://github.com/KarolKaczorowskiDev1)
+
+
+## License
+
+[MIT](https://choosealicense.com/licenses/mit/)
