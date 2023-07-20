@@ -17,9 +17,7 @@ class AI:
         ai_pieces = board.get_pieces()
         ai_moves = list(
             map(
-                lambda piece: piece.get_moves(board)
-                if piece.get_color() == turn
-                else False,
+                lambda piece: piece.get_moves(board) if piece.get_color() == turn else False,
                 ai_pieces,
             )
         )
@@ -99,9 +97,7 @@ class AI:
                 return -2
 
         total_pieces = len(board_pieces)
-        ai_pieces = len(
-            list(filter(lambda piece: piece.get_color() == self.color, board_pieces))
-        )
+        ai_pieces = len(list(filter(lambda piece: piece.get_color() == self.color, board_pieces)))
         player_pieces = total_pieces - ai_pieces
 
         if ai_pieces == player_pieces:
