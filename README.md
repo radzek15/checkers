@@ -5,6 +5,10 @@
                     It offers two exciting gameplay modes - Player vs Player (PvP) and Player vs CPU. In the latter mode, 
                     the CPU is implemented using the powerful minimax algorithm, providing players with a challenging and competitive experience.</p></div>
 
+
+https://github.com/radzek15/checkers/assets/79796741/eb772dd2-8f39-436c-ae0f-d8de9b59d43b
+
+
 | Feature                  | Description                                                                                                                                                                                                                                                                                                  |
 |--------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | Player vs Player Mode    | <p align="justify">This mode allows two human players to engage in a classic Checkers match on the same device. Each player takes turns moving their pieces across the board to capture their opponent's pieces and claim victory.</p>                                                                       |
